@@ -1,0 +1,682 @@
+{% comment %} Added by SolverCircle for Extra product options App (6) {% endcomment %}
+{% comment %} Please do not modify this file. {% endcomment %}
+
+{% if extra-product-options == null %}
+    {% if product.metafields.ExtraProductOptions.epo_is_enabled == 1  %}
+        {% if product.metafields.ExtraProductOptions.epo_options != empty %}
+            {% assign options_str = product.metafields.ExtraProductOptions.epo_options %}
+            <div id="epo-options" style="display: none;" data-pid="{{product.id}}" data-hvid="{{ shop.metafields.ExtraProductOptions.EPOHiddenVariant }}" data-product-title={{product.title | json}}>
+            {% assign options_str_len = options_str | size | minus:6 %}
+            {% assign options_str = options_str | slice:3 , options_str_len%} 
+            {% assign options = options_str | split:'"},{"' %}
+            {% for option in options %}
+                {% assign option_arr = option | split: '","' %}
+                {% for option_element in option_arr %}
+                    {% assign element = option_element | split : '":"' %}
+                    {% case element.first %}
+                        {% when 'name' %}
+                            {% assign escape = element.last %}
+              				{% capture to_html_entity %}
+                  			{% include 'extra-product-options' with 'escape' %}
+                  			{% endcapture %}
+              				{% capture option_name %}
+                  			{% include 'extra-product-options' with 'html-entity' %}
+                  			{% endcapture %}
+                        {% when 'options' %}
+                            {% assign option_value = element.last %}
+                        {% when 'type' %}
+                            {% assign option_type = element.last %}
+              			{% when 'required' %}
+                            {% assign option_required = element.last %}
+                    {% endcase %}
+                {% endfor %}
+
+                <div class="epo-option {% if option_type == 'lbl' %} epo-lbl-type {% endif %}">
+                  {% assign option_index = forloop.index0 %}
+                  {% case option_type %}
+                    {% when 'chk' %}
+                  		<label for="epo-option-{{option_index}}" {% if option_required == '1' %}class='epo-required'{%endif%}>{{option_name|strip}}</label>
+                  		{% assign values_str_len = option_value | size | minus:8 %}
+                  		{% assign values_str = option_value | slice: 4, values_str_len %}
+                  		{% assign escape = values_str %}
+                  		{%capture values %}
+                  		{% include 'extra-product-options' with 'escape' %}
+                  		{% endcapture %}
+                  		{% assign values = values | split: '"},{"' %}
+						{% for value in values %}
+							{% assign escape = value|split:'","'|first|split:'":"'|last %}		
+                  			{%capture value_name %}
+                  				{% include 'extra-product-options' with 'escape' %}
+                  			{% endcapture %}
+                  			{% assign to_html_entity = value_name %}
+                  
+                  			{% capture value_name %}
+                  				{% include 'extra-product-options' with 'html-entity' %}
+                  			{% endcapture %}
+                  			{% assign fprice = value|split:'","'|last|split:'":"'|last %}
+                  			{% capture sprice %}{% include 'extra-product-options' with 'format_money' %}{% endcapture %}
+                  			{% assign free = sprice|strip %}
+                  			<input type="checkbox" {%if free != '00' and free !='000' %}data-epo-price="{{sprice | money | strip_html}}"{%endif%} class="epo-option-{{option_index}}"  name="properties[epo-option-{{option_index}}]" value="{{value_name|strip}}" data-epo-name="{{option_name|strip}}-{{forloop.index0 | plus: 1}}" id="epo-option-{{option_index}}-{{forloop.index0}}" ><label for="epo-option-{{option_index}}-{{forloop.index0}}"> {{value_name|strip}} {%if free != '00' and free !='000'%}(+{{sprice | money | strip_html}}){%endif%} </label>
+                  			<br>
+						{%endfor%}
+                    {% when 'ddl' %}
+                        <label for="epo-option-{{option_index}}" {% if option_required == '1' %} class='epo-required' {%endif%} >{{option_name | strip }}</label>
+                        <select data-epo-price="" id="epo-option-{{option_index}}" data-epo-name="{{option_name|strip}}" name="properties[epo-option-{{option_index}}]" class="epo-option-{{option_index}}">
+                          <option value="-1">-- Select --</option> 
+                          {% assign values_str_len = option_value | size | minus:8 %}
+                  		  {% assign values_str = option_value | slice: 4, values_str_len %}
+                  		  {% assign escape = values_str %}
+                  		  {%capture values %}
+                  		  {% include 'extra-product-options' with 'escape' %}
+                  		  {% endcapture %}
+                  		  {% assign values = values | split: '"},{"' %}
+                          {% for value in values %}
+                            {% assign escape = value|split:'","'|first|split:'":"'|last %}
+                  			{% capture to_html_entity %}
+                  				{% include 'extra-product-options' with 'escape' %}
+                  			{% endcapture %}
+                          	{% capture value_name %}
+                  				{% include 'extra-product-options' with 'html-entity' %}
+                  			{% endcapture %}
+                            {% assign fprice = value|split:'","'|last|split:'":"'|last %}
+                          	{% capture sprice %}
+                  				{% include 'extra-product-options' with 'format_money' %}		
+                  			{% endcapture %}
+                          
+                          	{% assign free = sprice|strip %}
+                          
+                            <option data-epo-price="{% if free != '00' and free !='000' %}{{sprice | money| strip_html}}{% endif %}" value="{{value_name|strip}}">{{value_name|strip}} {% if free != '00' and free !='000' %}(+{{sprice | money | strip_html}}){%endif%}</option>
+                        {% endfor %}
+                        </select>
+                      {% when 'mddl' %}
+                            <label for="epo-option-{{option_index}}" {% if option_required == '1' %} class='epo-required' {%endif%} >{{option_name | strip }}</label>
+                  			<div class="epo-checkbox-dropdown">
+                    			-- Select --
+                    			<ul class="epo-checkbox-dropdown-list">
+                                  {% assign values_str_len = option_value | size | minus:8 %}
+                              {% assign values_str = option_value | slice: 4, values_str_len %}
+                              {% assign escape = values_str %}
+                              {%capture values %}
+                              {% include 'extra-product-options' with 'escape' %}
+                              {% endcapture %}
+                              {% assign values = values | split: '"},{"' %}
+                              {% for value in values %}
+                                {% assign escape = value|split:'","'|first|split:'":"'|last %}
+                                {% capture to_html_entity %}
+                                    {% include 'extra-product-options' with 'escape' %}
+                                {% endcapture %}
+                                {% capture value_name %}
+                                    {% include 'extra-product-options' with 'html-entity' %}
+                                {% endcapture %}
+                                {% assign fprice = value|split:'","'|last|split:'":"'|last %}
+                                  {% if fprice contains 'label' %}
+                                  <li>
+                                    <label class="epo-label"><i>{{value_name|strip}}</i></label>
+                                  </li>
+                                  {% else %}
+                                  {% capture sprice %}
+                                  {% include 'extra-product-options' with 'format_money' %}		
+                                  {% endcapture %}
+
+                                  {% assign free = sprice|strip %}
+                                  <li>
+                                    <label>
+                                      <input {%if free != '00' and free !='000' %}data-epo-price="{{sprice | money | strip_html}}"{%endif%} class="epo-option-{{option_index}}"  name="properties[epo-option-{{option_index}}]" value="{{value_name|strip}}" type="checkbox" data-epo-name="{{option_name|strip}}-{{forloop.index0 | plus: 1}}" id="epo-option-{{option_index}}-{{forloop.index0}}"  />
+                                      {{value_name|strip}} {% if free != '00' and free !='000' %}(+{{sprice | money | strip_html}}){%endif%}
+                                    </label>
+                                  </li>
+                                  
+                                  {% endif %}
+
+                            {% endfor %}
+                      
+                              </ul>
+                  			</div>
+                  	<style>
+                      .epo-checkbox-dropdown{
+						/*width: 200px; */
+                        border: 1px solid silver;
+                        cursor: pointer; /* use correct mouse pointer when hovering over the dropdown */
+                        padding: 10px;
+                        position: relative;
+                        margin: 0 auto;
+                        -webkit-touch-callout: none;
+                        -webkit-user-select: none;
+                        -khtml-user-select: none;
+                        -moz-user-select: none;
+                        -ms-user-select: none;
+                        user-select: none;
+                        background-color:#ffffff;
+                      }
+
+                      /* Display CSS arrow to the right of the dropdown text */
+                      .epo-checkbox-dropdown:after {
+                        content:'';
+                        height: 0;
+                        position: absolute;
+                        width: 0;
+                        border: 6px solid transparent;
+                        border-top-color: #000;
+                        top: 50%;
+                        right: 10px;
+                        margin-top: -3px;
+                      }
+
+                      /* Reverse the CSS arrow when the dropdown is active */
+                      .epo-checkbox-dropdown.epo-is-active:after {
+                        border-bottom-color: #000;
+                        border-top-color: #fff;
+                        margin-top: -9px;
+                      }
+
+                      .epo-checkbox-dropdown-list {
+                        background-color:#ffffff;
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                        position: absolute;
+                        top: 100%; /* align the dropdown right below the dropdown text */
+                        border: inherit;
+                        border-top: none;
+                        left: -1px; /* align the dropdown to the left */
+                        right: -1px; /* align the dropdown to the right */
+                        opacity: 0; /* hide the dropdown */
+                        -webkit-transition: opacity 0.4s ease-in-out;
+                        -moz-transition: opacity 0.4s ease-in-out;
+                        -o-transition: opacity 0.4s ease-in-out;
+                        -ms-transition: opacity 0.4s ease-in-out;
+                        transition: opacity 0.4s ease-in-out;
+                        pointer-events: none; /* avoid mouse click events inside the dropdown */
+                      }
+                      .epo-is-active .epo-checkbox-dropdown-list {
+                        opacity: 1; /* display the dropdown */
+                        pointer-events: auto; /* make sure that the user still can select checkboxes */
+                      }
+
+                      .epo-checkbox-dropdown-list li label {
+                        margin:0px;
+                        display: block;
+/*                         border-bottom: 1px solid silver; */
+                        padding: 10px;
+                        -webkit-transition: all 0.2s ease-out;
+                        -moz-transition: all 0.2s ease-out;
+                        -o-transition: all 0.2s ease-out;
+                        -ms-transition: all 0.2s ease-out;
+                        transition: all 0.2s ease-out;
+                      }
+
+                      .epo-checkbox-dropdown-list li label:hover:not(.epo-label) {
+                        background-color: #b2beb5;
+                        color: white;
+                        cursor:pointer;
+                      }
+                  </style>
+                    {% when 'rb' %}
+                        <label for="epo-option-{{option_index}}" {% if option_required == '1' %} class='epo-required' {%endif%} >{{option_name | strip }}</label>
+                        {% assign values_str_len = option_value | size | minus:8 %}
+                  		{% assign values_str = option_value | slice: 4, values_str_len %}
+                  		{% assign escape = values_str %}
+                  		{%capture values %}
+                  		{% include 'extra-product-options' with 'escape' %}
+                  		{% endcapture %}
+                  		{% assign values = values | split: '"},{"' %}
+                        {% for value in values %}
+                            {% assign escape = value|split:'","'|first|split:'":"'|last %}
+                  			{% capture to_html_entity %}
+                  				{% include 'extra-product-options' with 'escape' %}
+                  			{% endcapture %}
+                          	{% capture value_name %}
+                  				{% include 'extra-product-options' with 'html-entity' %}
+                  			{% endcapture %}
+                            {% assign fprice = value|split:'","'|last|split:'":"'|last %}
+                  			
+                          	{% capture sprice %}
+                  				{% include 'extra-product-options' with 'format_money' %}		
+                  			{% endcapture %}
+                  			{% assign free = sprice|strip %}
+                      <input type="radio" data-epo-price="{% if free != '00' and free !='000' %}{{sprice | money | strip_html}}{% endif %}" name="properties[epo-option-{{option_index}}]" class="epo-option-{{option_index}}" data-epo-name="{{option_name|strip}}" id="epo-option-{{option_index}}-{{forloop.index0}}" value="{{value_name|strip}}"><label style="display:inline;" for="epo-option-{{option_index}}-{{forloop.index0}}"> {{value_name|strip}} {%if free != '00' and free !='000'%}(+{{sprice | money | strip_html}}){%endif%} </label><br>
+                    {% endfor %}
+                    {% when 'slt' %}
+                  		{% assign slt_values_str_len = option_value |size|minus:6 %}
+                  		{% assign slt_values_str = option_value|slice:3, slt_values_str_len%}
+                        {%assign escape = slt_values_str%}
+                  		{% capture slt_values_str %}
+                  				{% include 'extra-product-options' with 'escape' %}
+                  		{% endcapture %}
+                  		{%assign slt_char = slt_values_str|split:'","'|first|split:'":"'|last%}
+                  		{%assign fprice = slt_values_str|split:'","'|last|split:'":"'|last%}
+                  
+                  		{% capture sprice %}
+                  			{% include 'extra-product-options' with 'format_money' %}		
+                  		{% endcapture %}
+                  		{% assign free = sprice|strip %}
+                 
+                    <label for="epo-option-{{option_index}} "{% if option_required == '1' %} class='epo-required' {%endif%} >{{option_name | strip}} {% assign free = sprice|strip %}{%if free != '00' and free !='000' %}(+{{sprice | money | strip_html}}){%endif%} <span class="max_char">[Maximum {{slt_char| highlight: slt_char }} character]</span></label>
+                  		<input  type="text" data-epo-name="{{option_name|strip}}" data-epo-price="{% if free != '00' and free !='000' %}{{sprice | money | strip_html}}{% endif %}" name="properties[epo-option-{{option_index}}]" class="epo-option-{{option_index}}" id="epo-option-{{option_index}}" maxlength="{{slt_char}}">
+                  {% when 'mlt' %}
+                  		{% assign mlt_values_str_len = option_value |size|minus:6 %}
+                  		{% assign mlt_values_str = option_value|slice:3, mlt_values_str_len%}
+                        {%assign escape = mlt_values_str%}
+                  		{% capture mlt_values_str %}
+                  				{% include 'extra-product-options' with 'escape' %}
+                  		{% endcapture %}
+                  		{%assign mlt_char = mlt_values_str|split:'","'|first|split:'":"'|last%}
+                  		{%assign fprice = mlt_values_str|split:'","'|last|split:'":"'|last%}
+                  		{% capture sprice %}
+                  			{% include 'extra-product-options' with 'format_money' %}		
+                  		{% endcapture %}
+                    <label for="epo-option-{{option_index}}" {% if option_required == '1' %} class='epo-required' {%endif%} >{{option_name | strip }} {% assign free = sprice|strip %}{%if free != '00' and free !='000'%}(+{{sprice | money | strip_html}}){%endif%} <span class="max_char">[Maximum {{mlt_char| highlight: mlt_char }} character]</span></label>
+                  		<textarea data-epo-price="{% if free != '00' and free !='000' %}{{sprice | money | strip_html}}{% endif %}" data-epo-name="{{option_name|strip}}" type="text" class="epo-option-{{option_index}}" name="properties[epo-option-{{option_index}}]" id="epo-option-{{option_index}}" maxlength="{{mlt_char}}"></textarea>
+                    {% when 'iu' %}
+	                  	{% assign iu_values_str_len = option_value |size|minus:6 %}
+                  		{% assign iu_values_str = option_value|slice:3, iu_values_str_len%}
+                        {%assign escape = iu_values_str%}
+                  		{% capture iu_values_str %}
+                  				{% include 'extra-product-options' with 'escape' %}
+                  		{% endcapture %}
+                  		{% assign fprice = iu_values_str|split:'":"'|last %}
+                  			{% capture sprice %}
+                  				{% include 'extra-product-options' with 'format_money' %}		
+                  			{% endcapture %}
+                        <label for="epo-option-{{option_index}}" {% if option_required == '1' %} class='epo-required' {%endif%}>{{option_name | strip}} {% assign free = sprice|strip %}{%if free != '00' and free !='000'%}(+{{sprice | money | strip_html}}){%endif%}</label>
+                        <input type="file" data-epo-price="{% if free != '00' and free !='000' %}{{sprice | money | strip_html}}{% endif %}" data-epo-name="{{option_name|strip}}" name="properties[epo-option-{{option_index}}]" class="epo-option-{{option_index}}" id="epo-option-{{option_index}}" >
+                  
+                  {% when 'dp' %}
+                  {% assign iu_values_str_len = option_value |size|minus:6 %}
+                  {% assign iu_values_str = option_value|slice:3, iu_values_str_len%}
+                  {%assign escape = iu_values_str%}
+                  {% capture iu_values_str %}
+                  	{% include 'extra-product-options' with 'escape' %}
+                  {% endcapture %}
+                  {% assign fprice = iu_values_str|split:'":"'|last %}
+                  {% capture sprice %}{% include 'extra-product-options' with 'format_money' %}{% endcapture %}
+                  <label for="epo-option-{{option_index}}" {% if option_required == '1' %}class='epo-required'{%endif%}>{{option_name | strip }} {% assign free = sprice|strip %}{%if free != '00' and free !='000'%}(+{{sprice | money | strip_html}}){%endif%} </label>
+                  <input class="date-picker epo-option-{{option_index}}" data-epo-price="{% if free != '00' and free !='000' %}{{sprice | money | strip_html}}{% endif %}" data-epo-name="{{option_name|strip}}"  id="epo-option-{{option_index}}" type="text" name="properties[epo-option-{{option_index}}]" value="" />
+                  {{ '//code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css' | stylesheet_tag }}
+                  
+                  
+                  {% comment %}
+                    To remove days of the week that aren't Saturday and Sunday, use this:
+                    http://stackoverflow.com/questions/2968414/disable-specific-days-of-the-week-on-jquery-ui-datepicker
+                  {% endcomment %}
+                  {% when 'lbl' %}
+                  <div style="clear:both"></div>
+                  	<label  for="epo-option-{{option_index}}" classs='' >{{option_name | strip }}</label>
+                  <div style="clear:both"></div>
+                  {% endcase %}
+                </div>
+            {% endfor %}
+              <div id="epo-help-msg-div" style="display:none;">
+                <span id='help-required'>* - Required</span>
+              </div>
+              <input type="hidden" id="error_txt" value=" is required.">
+              <div id="epo-erro-msg-div" style="color:#f00"></div>
+              <input type="hidden" value="{{shop.money_format | strip_html}}" class="epo-money-format">
+              {% if shop.metafields.ExtraProductOptions.epo_extra_price %}
+              <div class="epo-extra-price-div" style="display:none;">
+                <strong class="highlight">Selections will add <span class="epo-extra-price" ></span> to the price</strong>
+              </div>
+              {% endif %}
+              
+              <style>
+                #epo-options{
+                  clear: both;
+                  margin: 10px 0px 5px 0px;
+                }
+                #epo-options .epo-option{
+                  display:block;
+                  margin: 0px 0px 10px 0px;
+                }
+                .epo-option > label:first-child{
+                  display:block;
+                  margin: 0px;
+                }
+                .epo-option > input[type='checkbox'],.epo-option > input[type='radio']{
+                  height:initial;
+                  margin: 0px 5px 0px 0px;
+                }
+                .epo-option > input[type='checkbox'] + label,.epo-option > input[type='radio'] + label{
+                  display:inline;
+                  position:static;
+                  margin:0px;
+                }
+                #epo-erro-msg-div{
+                  display:block;
+                  color:#F00;
+                  margin:0px 0px 10px 0px;
+                }
+                #epo-erro-msg-div > span{
+                  display:block;
+                  height:initial;
+                }
+                .epo-required:after{
+                  content:" *";
+                  color:#F00;
+                }
+                #epo-help-msg-div{
+                  display:block;
+                  margin:0px 0px 10px 0px;
+                }
+                #epo-help-msg-div > span{
+                  display:block;
+                  height:initial;
+                }
+                #help-required{
+                  color:#F00;
+                }
+                .epo-extra-price{
+                	color: #AB1515;
+                }
+                .sc-epo-add-to-cart-div svg{
+                	vertical-align:middle;
+                }
+
+                {%if shop.metafields.ExtraProductOptions.epo_custom_css%}
+                {{shop.metafields.ExtraProductOptions.epo_custom_css}}
+                {%endif%}
+              </style>
+        </div>
+        
+        
+    
+        {% endif %}
+    {% endif %}
+{% endif %}
+{% if extra-product-options == 'item-properties' %}
+	{% assign property_size = item.properties | size %}
+	{% if property_size > 0 %}
+		<br>
+		{% for p in item.properties %}
+		{% assign underscore = p.first | first %}
+			{% if underscore != '_' %}
+			{% unless p.last == blank %}
+			{{ p.first }}:
+	
+			{% comment %}
+			Check if there was an uploaded file associated
+			{% endcomment %}
+			{% if p.last contains '/uploads/' %}
+				{% include 'extra-product-options' with 'item-properties-file-tag' %}
+			{% else %}
+				<span class="property-value">{{ p.last }}</span>{% include 'extra-product-options' with 'item-properties-price' %}
+			{% endif %}
+			<br>			
+			{% endunless %}
+			{%else%}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+{% endif %}
+
+{% if extra-product-options == 'item-properties-file-tag' %}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+<a href="{{ p.last }}"><span class="property-value">Click to see</span></a>{% include 'extra-product-options' with 'item-properties-price' %}
+	{% else %}
+		<a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+	{% endif %}
+{%endif%}
+
+{% if extra-product-options == 'item-properties-price' %}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+		{% assign prop = p %}
+		{% assign prop_name = prop.first %}
+		{% for cart_item in cart.items %}
+			{% assign cart_item_prop = cart_item.properties %}			
+			{% if  cart_item.id == shop.metafields.ExtraProductOptions.EPOHiddenVariant and cart_item_prop._ScEpoID == item.properties._ScEpoID and cart_item_prop[prop_name] %}
+				{% assign custom_pro = cart_item_prop[prop_name] %}
+				( +{{ cart_item_prop[prop_name] }} )	
+			{% else %}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+{%endif%}
+
+{% comment %}
+{% if extra-product-options == 'is-extra-product-item' %}
+	{% if item.id == shop.metafields.ExtraProductOptions.EPOHiddenVariant %}
+		{% include 'extra-product-options' with 'cart-item-data' %}
+		{% continue %}
+	{% endif %}
+{%endif%}
+{% endcomment %}
+
+{% comment %} new added {% endcomment %}
+{% if extra-product-options == 'is-extra-product-item' %}
+	{% if item.id == shop.metafields.ExtraProductOptions.EPOHiddenVariant %}
+		<input class="sc-epo-cart-item" type="hidden" data-line="{{ forloop.index }}">
+		{% continue %}
+	{% else %}
+		<input class="sc-epo-cart-item" type="hidden" data-line="{{ forloop.index }}">
+	{% endif %}
+
+{%endif%}
+
+{% if extra-product-options == 'line-item-row-class' %} sc_epo_line_item_row {%endif%}
+
+{%if extra-product-options == 'line-item-row-data' %}
+{% include 'extra-product-options' with 'extra-option-remove' %}  {% include 'extra-product-options'  with 'item-quantity' %}
+{% endif %}
+
+
+
+{% if extra-product-options == 'extra-option-remove' %}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+	data-epo-remove="{{forloop.index | plus: 1}}"
+	{% else %}
+	data-epo-remove="-1"
+	{%endif%}
+{%endif%}
+{% if extra-product-options == 'extra-option-remove-class' %}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+	sc_epo_remove
+	{%endif%}
+{%endif%}
+
+{% if extra-product-options == 'extra-option-remove-link' %}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+  		javascript:void(0);
+	{% else %}
+		/cart/change?line={{ forloop.index }}&amp;quantity=0
+	{% endif %}
+{%endif%}
+
+{% if extra-product-options == 'item-price' %}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+		{% assign qty = item.properties._ScEpoQty %}
+		{{ qty | plus: item.price | money }}
+	{%else%}
+		{{ item.price | money }}
+	{%endif%}
+{%endif%}
+{% if extra-product-options == 'item-price-no-money' %}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+		{% assign qty = item.properties._ScEpoQty %}
+		{% assign epo_index = forloop.index0 | plus:1 %}
+		{% if item.properties._ScEpoID == cart.items[epo_index].properties._ScEpoID %}
+			{% assign item_price = qty | times: cart.items[epo_index].price | plus: item.price %}
+		{%endif%}
+	{%else%}
+		{% assign item_price = item.price %}
+	{%endif%}
+{%endif%}
+{% if extra-product-options == 'item-line-price' %}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+		{% assign qty = item.properties._ScEpoQty %}
+		{% assign epo_index = forloop.index0|plus:1 %}
+		{% assign line_price = qty | times:cart.items[epo_index].price | times: item.quantity | plus: item.line_price %}
+	{%else%}
+		{% assign line_price = item.line_price %}
+	{%endif%}
+{%endif%}
+{% if extra-product-options == 'item-quantity-class' %}
+	sc_epo_quantity
+	{%comment%}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+		sc_epo_quantity
+	{%endif%}
+	{% endcomment%}
+{%endif%}
+{% if extra-product-options == 'item-quantity' %}
+	{% if item.properties._ScEpoID and item.properties._ScEpoQty %}
+		data-epo-qty="{{item.properties._ScEpoQty}}"
+		data-epo-index="{{forloop.index | plus: 1}}"
+		data-epo-main-index="{{forloop.index }}"
+	{% else %}
+		data-epo-qty="-1"
+		data-epo-index="-1"
+		data-epo-main-index="{{forloop.index}}"
+	{%endif%}
+{%endif%}
+{% if  extra-product-options == 'format_money' %}
+	{% if fprice == 'price'%}{{'00'}}{%else%}
+		{% assign price_arr = fprice | split: '.' %}
+		{% assign arr_size = price_arr |size %}
+		{% if arr_size == 1 %}{{price_arr.first|strip|append:'00'}}{% endif %}
+		{%if arr_size == 2%}
+			{% assign fraction_size = price_arr.last| strip | size %}
+			{%if fraction_size == 0 %}
+				{{  price_arr.first | strip| append:price_arr.last| strip| append:'00' }}
+			{%endif%}
+			{% if fraction_size == 1 %}
+				{{  price_arr.first | strip | append:price_arr.last| strip| append:'0' }}
+			{%endif%}
+			{%if fraction_size == 2 %}
+				{{  price_arr.first | strip | append:price_arr.last }}
+			{%endif%}
+		{%endif%}
+	{%endif%}
+{% endif %}
+{% if extra-product-options == 'escape' %}
+	{{ escape | replace:'\"','"' | replace:'\\','\' | replace:'\/','/' }}
+{% endif %}
+
+{% if extra-product-options == 'html-entity' %}
+	{{ to_html_entity | replace:'"','&quot;' | replace:'<','&lt;' | replace:'>','&gt;' }}
+{% endif %}
+
+{% if extra-product-options == 'hide-epo-product' %}
+	{% if template contains 'product' %}
+		{% assign epo_hidden_product = product %}
+	{%endif%}
+	{% if template contains 'search' %}
+		{% assign epo_hidden_product = search.results[forloop.index0] %}
+	{%endif%}
+	{% if template contains 'collection' %}
+		{% assign epo_hidden_product = collection.products[forloop.index0] %}
+	{%endif%}
+	{% if epo_hidden_product.metafields.ExtraProductOptions.IsHidden == 1 %}
+		{% if template contains 'product' %}
+			Product not available
+		{%endif%}
+		{% continue %}
+	{%endif%}	
+{% endif %}
+
+{% if extra-product-options == 'cart-count' %}
+	{% assign total_item = cart.item_count %}
+		{% for cart_item in cart.items %}
+		{% if cart_item.id == shop.metafields.ExtraProductOptions.EPOHiddenVariant %}
+			{% assign total_item = total_item | minus: cart_item.quantity %}
+		{% endif %}
+		{% endfor %}
+        {{ total_item}}
+{% endif %}
+
+{% if extra-product-options == 'epo-add-to-cart-btn' %}
+	{% if product.metafields.ExtraProductOptions.epo_is_enabled == 1  %}
+		{% comment %}
+		Add to cart button of product page needs to be removed / hidden.
+  Following button element will be added here. 
+  AND then you may need to add css classes from Add to cart button to make the button look like same as existing add to cart button.
+  example  - <input type="button" class="sc-epo-add-to-cart some-classes" value="Add to cart">
+	{% endcomment %}
+	<div class="sc-epo-add-to-cart-div">
+		<!-- add to cart  -->
+
+		<!-- cart loader -->
+		<svg style="display:none" class="sc-epo-cart-loading" width='30px' height='30px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" >
+		<rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect>
+		<circle cx="50" cy="50" r="40" stroke="rgba(0,0,0,0)" fill="none" stroke-width="10" stroke-linecap="round"></circle>
+			<circle class="sc-epo-cart-loading-spinner" cx="50" cy="50" r="40" stroke="#cbcbff" fill="none" stroke-width="6" stroke-linecap="round">
+				<animate attributeName="stroke-dashoffset" dur="2s" repeatCount="indefinite" from="0" to="502"></animate>
+				<animate attributeName="stroke-dasharray" dur="2s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate>
+			</circle>
+		</svg>
+	</div>
+	{%else%}
+    {% comment %}
+				Add to cart button of product page will be added here.
+    {% endcomment %}
+	{% endif %}
+{% endif %}
+
+
+{% if extra-product-options == 'epo-product-script' %}
+	{% if template contains 'product'  and product.metafields.ExtraProductOptions.epo_options != null %}
+ <script type="text/javascript" src="/apps/extra-product-options/scripts/extra-product-options.min.js"></script>
+
+		<script>
+          ;(function(){
+            function epocallback(){
+              if(typeof epo_app_1568 != 'undefined'){
+                document.getElementById("epo-options").style.display = "block";
+                epo_main_product = {{ product | json }};
+                sc_epo_options = {{product.metafields.ExtraProductOptions.epo_options | json}};
+                sc_epo_post_type = 1;
+                sc_epo_cost = 0.01;
+                {% if shop.metafields.ExtraProductOptions.epo_total_price %}
+                sc_epo_show_total_amount = true;
+                {% endif %}
+                if(typeof init_epo != 'undefined'){
+                  init_epo(sc_epo_options);
+                }
+              }else{ 
+                var epo_options = document.getElementById("epo-options");
+                epo_options.parentNode.removeChild(epo_options);
+              }
+            }
+            window.attachEvent ? window.attachEvent('onload', epocallback) : window.addEventListener('load', epocallback, false);
+          })();
+          function sc_epo_get_product_quantity(productForm){
+            if(sc_epo_jquery(productForm).find('*[name="quantity"], *[name="Quantity"]').length){
+              return sc_epo_jquery(productForm).find('*[name="quantity"], *[name="Quantity"]').val();
+            }else{
+              return 1;
+            }   	
+          }
+          function sc_epo_ajax_cart_callback(productForm,success){
+          	window.location = "/cart";
+          }
+          function sc_epo_external_add_to_cart(productForm){
+          	// this function will be used for adding product to cart if 'sc_epo_post_type' will be -1.
+          }
+        </script>
+	{% endif %}
+
+
+{%endif%}
+
+{% if extra-product-options == 'epo-cart-script' %}
+<style>
+  {%if shop.metafields.ExtraProductOptions.epo_custom_css%}
+  {{shop.metafields.ExtraProductOptions.epo_custom_css}}
+  {%endif%}
+</style>
+<script type="text/javascript" src="/apps/extra-product-options/scripts/js/extra-product-options-cart.min.js"></script>
+<script>
+  sc_epo_cart = {{cart | json}};
+  sc_epo_hdn = {{shop.metafields.ExtraProductOptions.EPOHiddenVariant }};
+  (function(){
+    function epoCartCallback(){
+      if(typeof init_epo_cart != 'undefined'){
+        init_epo_cart(function(){
+          console.log('ScEpo: called cart callback');
+								});
+						}
+				}
+    window.attachEvent ? window.attachEvent('onload', epoCartCallback) : window.addEventListener('load', epoCartCallback, false);
+  })();
+</script>
+
+
+{%endif%}

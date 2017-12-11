@@ -1,0 +1,93 @@
+<section style="    margin-bottom: 0px;" class="section section--page page">
+	<div class="container container--tiny">
+		<div class="section__title section__title--center">
+            <h1 class="section__title-text h2">{{ page.title }}</h1>
+        </div>
+
+        {% if page.content.size > 0 %}
+	        <div class="page__content rte">
+	      		{{ page.content }}
+	    	</div>
+	    {% endif %}
+	</div>
+
+	<div class="page__contact-form">
+		<div class="container container--tiny container--mob-0">
+<p>
+  
+
+
+</p>
+
+          			
+      <label for="contact" id="contact"></label>
+
+                <label for="contact" class="hidden" id="activateLink"><a href="https://www.ufangiftcards.com/home.html?csrfToken=W0ekUHNSnJnLv2uHTjgT8LrKQ20a2htV">activate your card here</a></label>
+
+        <label for="contact" class="hidden" id="cardbalanceLink"><a href="https://www.ufangiftcards.com/home.html?csrfToken=p4ovZLfzAKrqLq3YBvw2QQfY8gLIdT0H">check your card balance here</a></label>
+	    	
+        
+        {% form 'contact' %}
+            <div id="top" class="show">
+
+          
+    <label for="method">How can we assist?</label>
+    <select id="method" name="contact[Subject]" required>
+              <option value="general">Select a Topic</option>
+        <option  value="team">Team Suggestion</option>
+        <option value="activate">Card Activation</option>
+        <option value="check">Check Card Balance</option>
+        <option value="eta">Shipping Questions</option>
+        <option value="gen">General Question</option>
+
+
+
+    </select> 
+          </div>
+              <div id="showTime" class="hidden">
+
+                
+                
+
+				{{ form.errors | default_errors }}
+
+				<div class="o-layout">
+					<div class="o-layout__item u-1/1 u-1/2@tab">
+						<label for="ContactFormName">{{ 'contact.form.name' | t }}</label>
+                      
+                      		
+						<input type="text" id="ContactFormName" name="contact[name]" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+
+<!--                       <input type="email" name="contact" id="contact" value="" maxlength="255"> <span class="help-text">e.g. stuff@yourdomain.com</span>
+ -->
+                  
+                  </div>
+					<div class="o-layout__item u-1/1 u-1/2@tab">
+						<label for="ContactFormEmail" class="{% if form.errors contains 'email' %}label--error{% endif %}">{{ 'contact.form.email' | t }}</label>
+						
+                      
+
+                      
+                      
+                      <input type="email" id="ContactFormEmail" name="contact[email]" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" class="{% if form.errors contains 'email' %}input--error{% endif %}">
+					</div>
+				</div>
+
+
+				<label for="ContactFormPhone">{{ 'contact.form.phone' | t }}</label>
+				<input type="tel" id="ContactFormPhone" name="contact[phone]" pattern="[0-9\-]*" value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+
+				<label for="ContactFormMessage">{{ 'contact.form.message' | t }}</label>
+				<textarea rows="10" id="ContactFormMessage" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+				<input type="submit" class="c-btn c-btn--primary c-btn--center" value="{{ 'contact.form.send' | t }}">
+                	    </div>
+                  	    		{% if form.posted_successfully? %}
+<meta http-equiv="refresh" content="0; URL='https://fancardgift.com/pages/contact-confirmation'" />
+				{% endif %}
+
+	    	{% endform %}
+                
+	</div>
+
+</section>

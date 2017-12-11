@@ -1,0 +1,318 @@
+/*primary, secondary, tertiary, and quaternary colors*/
+
+.alabama-mastercard-gift-card-primary {
+	background-color: #990000;
+}
+
+.alabama-mastercard-gift-card-secondary {
+	background-color: white;
+}
+
+.alabama-mastercard-gift-card-button {
+	background-color: #990000;
+}
+.alabama-mastercard-gift-card-button:hover {
+	background-color: #777777;
+}
+.alabama-mastercard-gift-card-title {
+	color: #990000;
+}
+
+
+.arizona-mastercard-gift-card-primary {
+	background-color: #CC0033;
+}
+.arizona-mastercard-gift-card-secondary {
+	background-color: #003366;
+}
+.arizona-mastercard-gift-card-button {
+	background-color: #003366;
+}
+.arizona-mastercard-gift-card-button:hover {
+	background-color: #CC0033;
+}
+.arizona-mastercard-gift-card-title {
+	color: #CC0033;
+}
+
+
+
+.gators-mastercard-gift-card-primary {
+	background-color: #0021A5;
+}
+.gators-mastercard-gift-card-secondary {
+	background-color: #FA4616;
+}
+.gators-mastercard-gift-card-button {
+	background-color: #0021A5;
+}
+.gators-mastercard-gift-card-button:hover {
+	background-color: #FA4616;
+}
+.gators-mastercard-gift-card-title {
+	color: #0021A5;
+}
+
+.seminoles-mastercard-gift-card-primary {
+	background-color: #782F40;
+}
+.seminoles-mastercard-gift-card-secondary {
+	background-color: #FA4616;
+}
+.seminoles-mastercard-gift-card-button {
+	background-color: #782F40;
+}
+.seminoles-mastercard-gift-card-button:hover {
+	background-color: #FA4616;
+}
+.seminoles-mastercard-gift-card-title {
+	color: #782F40;
+}
+
+
+.cougars-mastercard-gift-card-primary {
+	background-color: #C8102E;
+}
+.cougars-mastercard-gift-card-secondary {
+	background-color: #7d2935;
+}
+.cougars-mastercard-gift-card-button {
+	background-color: #C8102E;
+}
+.cougars-mastercard-gift-card-button:hover {
+	background-color: #7d2935;
+}
+.cougars-mastercard-gift-card-title {
+	color: #C8102E;
+}
+
+
+
+.cardinals-mastercard-gift-card-primary {
+	background-color: #E31B23;
+}
+.cardinals-mastercard-gift-card-secondary {
+	background-color: black;
+}
+.cardinals-mastercard-gift-card-button {
+	background-color: black;
+}
+.cardinals-mastercard-gift-card-button:hover {
+	background-color: #E31B23;
+}
+.cardinals-mastercard-gift-card-title {
+	color: #E31B23;
+}
+
+
+
+.hurricanes-mastercard-gift-card-primary {
+	background-color: #005030;
+}
+.hurricanes-mastercard-gift-card-secondary {
+	background-color: #F47321;
+}
+.hurricanes-mastercard-gift-card-button {
+	background-color: #005030;
+}
+.hurricanes-mastercard-gift-card-button:hover {
+	background-color: #F47321;
+}
+.hurricanes-mastercard-gift-card-title {
+	color: #005030;
+}
+
+
+
+.bulldogs-mastercard-gift-card-primary {
+	background-color: #660000;
+}
+.bulldogs-mastercard-gift-card-secondary {
+	background-color: #CCCCCC;
+}
+.bulldogs-mastercard-gift-card-button {
+	background-color: #660000;
+}
+.bulldogs-mastercard-gift-card-button:hover {
+	background-color: #CCCCCC;
+}
+.bulldogs-mastercard-gift-card-title {
+	color: #660000;
+}
+
+
+.huskers-mastercard-gift-card-primary {
+	background-color: #D00000;
+}
+.huskers-mastercard-gift-card-secondary {
+	background-color: #FEFDFA;
+}
+.huskers-mastercard-gift-card-button {
+	background-color: #D00000;
+}
+.huskers-mastercard-gift-card-button:hover {
+	background-color: #FEFDFA;
+}
+.huskers-mastercard-gift-card-title {
+	color: #D00000;
+}
+
+
+
+.rebels-mastercard-gift-card-primary {
+	background-color: #00356B;
+}
+.rebels-mastercard-gift-card-secondary {
+	background-color: #DC143C;
+}
+.rebels-mastercard-gift-card-button {
+	background-color: #00356B;
+}
+.rebels-mastercard-gift-card-button:hover {
+	background-color: #DC143C;
+}
+.rebels-mastercard-gift-card-title {
+	color: #00356B;
+}
+
+
+.beavers-mastercard-gift-card-primary {
+	background-color: #DC4405;
+}
+.beavers-mastercard-gift-card-secondary {
+	background-color: black;
+}
+.beavers-mastercard-gift-card-button {
+	background-color: #DC4405;
+}
+.beavers-mastercard-gift-card-button:hover {
+	background-color: black;
+}
+.beavers-mastercard-gift-card-title {
+	color: #DC4405;
+}
+
+
+.spartans-mastercard-gift-card-primary {
+	background-color: #18453B;
+}
+.spartans-mastercard-gift-card-secondary {
+	background-color: white;
+}
+.spartans-mastercard-gift-card-button {
+	background-color: #18453B;
+}
+.spartans-mastercard-gift-card-button:hover {
+	background-color: white;
+}
+.spartans-mastercard-gift-card-title {
+	color: #18453B;
+}
+
+
+
+.gamecocks-mastercard-gift-card-primary {
+	background-color: #73000A;
+}
+.gamecocks-mastercard-gift-card-secondary {
+	background-color: black;
+}
+.gamecocks-mastercard-gift-card-button {
+	background-color: #73000A;
+}
+.gamecocks-mastercard-gift-card-button:hover {
+	background-color: black;
+}
+.gamecocks-mastercard-gift-card-title {
+	color: #73000A;
+}
+
+
+.vols-mastercard-gift-card-primary {
+	background-color: #FF8200;
+}
+.vols-mastercard-gift-card-secondary {
+	background-color: #58595B;
+}
+.vols-mastercard-gift-card-button {
+	background-color: #FF8200;
+}
+.vols-mastercard-gift-card-button {
+	background-color: #58595B;
+}
+.vols-mastercard-gift-card-title {
+	color: #FF8200;
+}
+
+
+.texas-mastercard-gift-card-primary {
+  background-color: #BF5700;
+}
+.texas-mastercard-gift-card-secondary {
+	background-color: #333F48;
+}
+.texas-mastercard-gift-card-button {
+	background-color: #BF5700;
+}
+.texas-mastercard-gift-card-button:hover {
+	background-color: #333F48;
+}
+.texas-mastercard-gift-card-title {
+	color: #BF5700;
+}
+
+
+.texas-a-m-mastercard-gift-card-primary {
+  background-color: #500000;
+}
+.texas-a-m-mastercard-gift-card-secondary {
+	background-color: #707373;
+}
+.texas-a-m-mastercard-gift-card-button {
+	background-color: #500000;
+}
+.texas-a-m-mastercard-gift-card-button {
+	background-color: #707373;
+}
+.texas-a-m-mastercard-gift-card-title {
+	color: #500000;
+}
+
+.wolverines-mastercard-gift-card-primary {
+	background-color: #FFCB05;
+}
+.wolverines-mastercard-gift-card-secondary {
+	background-color: #00274C;
+}
+.wolverines-mastercard-gift-card-button {
+	background-color: #00274C;
+}
+.wolverines-mastercard-gift-card-button:hover {
+	background-color: #FFCB05;
+}
+.wolverines-mastercard-gift-card-title {
+	color: #00274C;
+}
+
+.wvu-mastercard-gift-card-primary {
+	background-color: #003366;
+}
+.wvu-mastercard-gift-card-secondary {
+	background-color: #EAAA00;
+}
+.wvu-mastercard-gift-card-button {
+	background-color: #003366;
+}
+.wvu-mastercard-gift-card-button:hover {
+	background-color: #EAAA00;
+}
+.wvu-mastercard-gift-card-title {
+	color: #003366;
+}
+.product-fees {
+ font-weight: 100;
+  padding-top: 5px;
+}
+.product-fees-total {
+ font-weight: 500;
+}

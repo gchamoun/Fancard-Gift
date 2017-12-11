@@ -1,0 +1,35 @@
+{% unless grid_image_width %}
+    {%- assign grid_image_width = '600x600' -%}
+{% endunless %}
+<a href="{{ product.url | within: collection }}" class="product-link{% if page == 'home' %} home-products__link{% endif %}" title="{{ product.title }}">
+    <div class="product{% unless product.available %} product--sold-out{% endunless %} product--{{ settings.product_grid_align }}{% if page == 'home' %} home-products__item{% endif %}">
+        
+        <div class="product__media u-bg-{{ settings.product_grid_bg }}">
+            <div class="product__img-wrapper">
+                <img src="{{ product.featured_image.src | img_url: '100x' }}" data-src="{{ product.featured_image.src | img_url: grid_image_width }}" alt="{{ product.featured_image.alt }}" class="product__img lazyload">
+            </div>
+            {% if settings.product_grid_label %}
+                {% if product.compare_at_price > product.price and product.available %}
+                <div class="product__label label">
+                    <p class="product__label-text label__text">{{ 'products.product.on_sale' | t }}</p>
+                </div>
+                {% endif %}
+                {% unless product.available %}
+                 <div class="product__label label">
+                    <p class="product__label-text label__text">{{ 'products.product.sold_out' | t }}</p>
+                </div>
+                {% endunless %}
+            {% endif %}
+        </div>
+        <div class="product__details">
+            <h4 class="product__title h4">{{ product.title }}</h4>
+
+            {% if settings.product_grid_vendor %}
+                <h4 class="product__vendor h6">{{ product.vendor }}</h4>
+            {% endif %}
+
+            
+        </div>
+
+    </div>
+</a>

@@ -1,0 +1,1075 @@
+<style>
+  .lazyloaded {
+    -webkit-filter: blur(0);
+    filter: blur(0);
+  }</style>
+
+{%- include 'bold-product' with product, hide_action: 'break', output: 'none' -%}
+<div itemscope itemtype="http://schema.org/Product" id="ProductSection-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="product" data-enable-history-state="true">
+    <meta itemprop="name" content="{{ product.title }}">
+    <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+    <meta itemprop="image" content="{{ product.featured_image.src | img_url: 'grande' }}">
+
+    {% assign current_variant = product.selected_or_first_available_variant %}
+
+    {% case section.settings.image_size %}
+        {% when 'small' %}
+            {%- assign image_size = '640x' -%}
+        {% when 'medium' %}
+            {%- assign image_size = '820x' -%}
+        {% when 'large' %}
+            {%- assign image_size = '920x' -%}
+    {% endcase %}
+  
+<div id="team-header" class="{{product.handle}}-primary page-header">
+<div style="padding-top:0px;" class="container">
+<div id="{{product.handle}}">
+ <div style="background-color:transparent;" class=""> 
+  <div id = "header-page" style="border-bottom: 0px solid #eee;" class="text-header page-header" data-parallax="true">        
+    <img  style="width:60%;" class="img-responsive center-block" src="https://cdn.shopify.com/s/files/1/0986/0308/files/{{product.handle}}.png" width="100%" alt="" />
+  </div>
+</div></div>
+</div></div>
+  
+  
+  {% if section.settings.show_related_products == true %} 
+        {% assign number_of_related_products_per_row = section.settings.related_grid_num %}
+        {% assign number_of_rows = 6 %}
+
+        {% comment %}
+            Set either or both to true, if you want to limit yourself to items with same vendor, and/or type.
+        {% endcomment %}
+        {% assign same_vendor = false %}
+        {% assign same_type = false %}
+
+        {% comment %}
+            Collections to ignore. Never pick related items from those.
+        {% endcomment %}
+
+        {% comment %}
+            Looking for a relevant collection.
+        {% endcomment %}
+      
+
+        {% assign found_a_collection = false %}
+        {% if collection and collection.all_products_count > 1 %}
+            {% unless exclusions contains collection.handle %}
+                {% assign found_a_collection = true %}
+            {% endunless %}
+        {% endif %}
+        {% unless found_a_collection %}
+            {% for c in product.collections %}
+                {% unless exclusions contains c.handle or c.all_products_count < 2 %}
+                    {% assign found_a_collection = true %}
+                    {% assign collection = c %}
+                    {% break %}
+                {% endunless %}
+            {% endfor %}
+        {% endunless %}
+
+        {% comment %}
+            If we have a relevant collection.
+        {% endcomment %}
+        {% if found_a_collection %}
+
+            {% assign counter = 0 %}
+            {% assign break_at = number_of_rows | times: number_of_related_products_per_row %}
+            {% assign current_product = product %}
+
+            {% case number_of_related_products_per_row %}
+                {% when 2 %}
+                    {%- assign grid_item_width = 'u-1/2@tab' -%}
+                    {%- assign image_size = '800x' -%}
+                {% when 3 %}
+                    {%- assign grid_item_width = 'u-1/3@tab' -%}
+                    {%- assign image_size = '550x' -%}
+                {% when 4 %}
+                    {%- assign grid_item_width = 'u-1/3@tab u-1/4@desk' -%}
+                    {%- assign image_size = '400x' -%}
+            {% endcase %}
+
+            {% capture related_items %}
+                {% for product in collection.products %}
+                {% unless product.handle == current_product.handle %}
+                    {% unless same_vendor and current_product.vendor != product.vendor %}
+                        {% unless same_type and current_product.type != product.type %}
+  <a href="https://fancardgift.com/products/{{product.handle}}"><img class="color logos" src="https://cdn.shopify.com/s/files/1/0986/0308/files/{{product.handle}}-logo.png?15896358015093722021"></a>                      
+
+      {% assign counter = counter | plus: 1 %}
+                            {% if counter == break_at %}
+                                {% break %}
+                            {% endif %}
+                        {% endunless %}
+                    {% endunless %}
+                {% endunless %}
+            {% endfor %}
+            {% endcapture %}
+
+            {% assign related_items = related_items | trim %}
+
+            {% unless related_items == blank %}
+                <section class="logo-section section section--related-products">
+                    <div class="container container--extra-large">
+                        {% unless section.settings.related_title == blank %}
+                        {% endunless %}
+                    </div>
+                    <div class="logo-container container container--extra-large">
+                        <div class="related-products js-related-products" data-section-id="{{ section.id }}">
+                            <div class="logo-margin o-layout layout-slider js-layout-slider js-layout-slider-{{ section.id }}{% if settings.product_grid_masonry %} o-layout--masonry{% endif %}{% if section.settings.related_grid_num == 4 %} o-layout--small{% endif %}">
+                                {{ related_items }}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% endunless %}
+         
+        {% endif %}
+    {% endif %}
+</div>                                                                                                                                            </img>
+                                  
+                                                              
+                        </section>
+
+
+
+  <section class="section section--product-single js-product-single" data-section-id="{{ section.id }}" data-section-type="product-single">
+        
+        <div class="product-single product-single--{{ section.settings.layout }} product-single--text-{{ section.settings.text_color }} product-single--{{product.id}} js-product-{{product.id}}">
+            
+          <div class="product-single__top">
+                
+                <div class="product-single__top-bg product-single__top-bg--{{ section.settings.bg_height }} u-bg-{{ section.settings.bg_color }}{% if section.settings.layout == 'classic' %} js-product-bg js-product-bg--{{ section.settings.bg_height }}{% endif %}"></div>
+
+
+                <div class="container">
+                    {% if section.settings.layout == 'classic' %}
+                    <div class="u-hidden@desk-up" data-set="cart-photo-replace">
+                        <div class="js-cart-replace">
+                    {% endif %}
+                            <div class="product-single__photo">
+                                 <div class="product-single__photo product-single__photo--{{ section.settings.image_size }} js-product-slider" data-slider-id="1">
+                                    {% for image in product.images %}
+                                        <div class="product-single__photo__item" data-variant-id="{% for variant in image.variants %}{{ variant.id }}{% endfor %}" data-slide-id="{{ forloop.index0 }}">
+
+                                            {% if section.settings.enable_zoom %}
+                                            <a href="{{ image.src | img_url: 'original' }}" class="product-single__photo-zoom js-product-zoom">
+                                            {% endif %}
+                                                <img src="{{ image.src | img_url: '100x' }}" data-lazy="{{ image.src | img_url: image_size }}" alt="{{ image.alt | escape }}" class="product-single__photo__img" data-ratio="{{ image.aspect_ratio }}">
+                                            {% if section.settings.enable_zoom %}
+                                            </a>
+                                            {% endif %}
+
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                {% if product.images.size > 1 %}
+                                    <div style ="width: 477px; class="product-single__photo-thumbs js-product-single-thumbs">
+                                        {% for image in product.images %}
+                                            <div>Product image {{ forloop.index }}<img src="{{ image.src | img_url: '24x24', crop: 'center' }}" data-src="{{ image.src | img_url: '92x92', crop: 'center' }}" alt="{{ image.alt | escape }}" class="product-single__photos-thumbs__img lazyload"></div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                    {% if section.settings.layout == 'classic' %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="container container--medium">
+                <div class="product-single__bottom">
+                    <div class="o-layout o-layout--reverse o-layout--large">
+                        <div class="o-layout__item u-1/1 u-2/5@desk">
+
+                            {% if section.settings.layout == 'classic' %}
+                            <div class="u-hidden@desk-down" data-set="cart-replace">
+                                <div class="js-cart-replace">
+                            {% endif %}
+                                    <div class="product-single__box js-product-single-box" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+
+                                        <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+                                        <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+
+                                        <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="product-single__price js-product-price">
+                        <center><h2 itemprop="name" class="{{product.handle}}-title" >The {{ product.metafields.product.title_clean }}</h2></center>
+
+                    
+                                            <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+                                            {% if product.available %}
+                                                <link itemprop="availability" href="http://schema.org/InStock" />
+                                            {% else %}
+                                                <link itemprop="availability" href="http://schema.org/OutOfStock" />
+                                            {% endif %}
+
+                                        </div>
+
+
+                                        <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-single__form js-product-form js-product-form--{{ product.id }}">
+<p style="font-size: 12px">The {{ product.metafields.product.title_clean }} may be used at millions of locations in the U.S. and District of Columbia everywhere Debit Mastercard is accepted, including retail stores and online merchants.</p>
+
+                                            {% if section.settings.show_reviews %}
+                                                <div class="product-single__reviews-stars">
+                                                    <a href="#acc-reviews" class="product-single__reviews-stars-link js-review-scroll js-accordion-trigger">
+                                                        <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+
+                                            <div class="product-single__variant">
+                                                <select name="id" id="productSelect-1" class="product-single__variant-select">
+                                                    {% for variant in product.variants %}
+                                                        {% if variant.available %}
+
+                                                         <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" class="productbeforetest" value="{{ variant.id }}">{{ variant.title }}</option>
+
+                                                        {% else %}
+
+                                                            <option disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            {% if section.settings.show_quantity_selector %}
+                                                <div class="product-single__qty">
+                                                    <label for="Quantity" class="quantity-selector">{{ 'products.product.quantity' | t }}</label>
+                                                    <div class="product-single__qty-input">
+                                                        <input type="number" id="Quantity" name="quantity" value="1" min="1" class="quantity-selector">
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                                                                                                                                      
+                                                                                                                                                      
+                                            <p style="font-size:1rem;" class="product-single__price-text js-product-price-text">
+                                                <span class="u-hidden-visually">{{ 'products.general.regular_price' | t }}</span>
+                                                <span class="js-product-price-number">
+                                                </span>
+                                                {% if product.compare_at_price_max > product.price %}
+                                                    <span class="u-hidden-visually">{{ 'products.general.sale_price' | t }}</span>
+                                                    <span class="js-product-price-compare">
+                                                        <s class="product-single__price-compare"><span class="money">{{ current_variant.compare_at_price | money }}</span></s>
+                                                    </span>
+                                                                                                                    
+                                                {% endif %}
+                                            </p>
+
+                                            <div class="product-single__add">
+                                                <button type="submit" name="add" class="{{product.handle}}-button c-btn c-btn--full c-btn--plus c-btn--primary product-single__add-btn js-product-add">
+                                                    <span id="AddToCartText" class="js-product-add-text">{{ 'products.product.add_to_cart' | t }}</span>
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                                                                                        
+                                                                                                        
+                                                                                                        
+                                        {% if section.settings.show_share_buttons %}
+                                            {% capture share_link %}{{ shop.url }}{{ product.url }}{% endcapture %}
+                                            {% capture share_title %}{{ product.title | url_param_escape }}{% endcapture %}
+                                            {% capture share_img %}{{ product.featured_image | product_img_url: '1024x1024' }}{% endcapture %}
+                                            <div class="product-single__share">
+                                                <ul class="product-single__share-items o-list-bare">
+                                                    {% if settings.share_googleplus %}
+                                                    <li class="product-single__share-item">
+                                                        <a href="//plus.google.com/share?url={{ share_link }}" class="product-single__share-link icon-fallback" target="_blank">
+                                                            <i class="icon icon--google-plus" aria-hidden="true"></i>
+                                                            <span class="icon-fallback__text">Google+</span>
+                                                        </a>
+                                                    </li>
+                                                    {% endif %}
+                                                    {% if settings.share_facebook %}
+                                                    <li class="product-single__share-item">
+                                                        <a href="//www.facebook.com/sharer.php?u={{ share_link }}" class="product-single__share-link icon-fallback" target="_blank">
+                                                            <i class="icon icon--facebook" aria-hidden="true"></i>
+                                                            <span class="icon-fallback__text">Facebook</span>
+                                                        </a>
+                                                    </li>
+                                                    {% endif %}
+                                                    {% if settings.share_twitter %}
+                                                    <li class="product-single__share-item">
+                                                        <a href="//twitter.com/share?text={{ share_title }}&amp;url={{ share_link }}" class="product-single__share-link icon-fallback" target="_blank">
+                                                            <i class="icon icon--twitter" aria-hidden="true"></i>
+                                                            <span class="icon-fallback__text">Twitter</span>
+                                                        </a>
+                                                    </li>
+                                                    {% endif %}
+                                                    {% if settings.share_pinterest %}
+                                                    <li class="product-single__share-item">
+                                                        <a href="http://pinterest.com/pin/create/button/?url={{ share_link }}&amp;media={{ share_img }}&amp;description={{ share_title }}" class="product-single__share-link icon-fallback" target="_blank">
+                                                            <i class="icon icon--pinterest" aria-hidden="true"></i>
+                                                            <span class="icon-fallback__text">Pinterest</span>
+                                                        </a>
+                                                    </li>
+                                                    {% endif %}
+                                                    {% if settings.share_fancy %}
+                                                    <li class="product-single__share-item">
+                                                        <a href="//www.thefancy.com/fancyit?ItemURL={{ share_link }}&Title={{ share_title }}&ImageURL={{ share_img }}" class="product-single__share-link icon-fallback" target="_blank">
+                                                            <i class="icon icon--fancy" aria-hidden="true"></i>
+                                                            <span class="icon-fallback__text">Fancy</span>
+                                                        </a>
+                                                    </li>
+                                                    {% endif %}
+                                                    {% if settings.share_mail %}
+                                                    <li class="product-single__share-item">
+                                                        <a href="mailto:?body={{ share_title }} - {{ share_link }}" class="product-single__share-link icon-fallback">
+                                                            <i class="icon icon--mail" aria-hidden="true"></i>
+                                                            <span class="icon-fallback__text">Email</span>
+                                                        </a>
+                                                    </li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                            {% if section.settings.layout == 'classic' %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                        </div>
+                        <div class="o-layout__item u-1/1 u-3/5@desk">
+                            
+                            {% if section.settings.layout == 'classic' %}
+                                <div class="u-hidden@desk-down" data-set="cart-photo-replace"></div>
+                                <div class="u-hidden@desk-up" data-set="cart-replace"></div>
+                            {% endif %}
+                            
+                            <div class="product-single__content">
+                                <div class="product-single__content-text rte" itemprop="description">
+                                    {{ product.description }}
+                                </div>
+
+                                <div class="product-single__accordion js-accordion">
+
+                                    {% for block in section.blocks %}
+                                        {%- assign tab = pages[block.settings.tab_content] -%}
+                                        {% unless tab.title == blank %}
+                                            <a href="#acc-{{ forloop.index }}" class="product-single__accordion__title js-accordion-trigger">
+                                                <h4 class="product-single__accordion__title-text">{{ tab.title }}</h4>
+                                                <span class="product-single__accordion__title-icon icon-fallback">
+                                                    <i class="icon icon--plus" aria-hidden="true"></i>
+                                                    <span class="icon-fallback__text">{{ 'products.layout.tab_label' | t }}</span>
+                                                </span>
+                                            </a>
+                                            <div id="acc-{{ forloop.index }}" class="product-single__accordion__item js-accordion-info">
+                                                <div class="product-single__accordion__item-wrap rte">
+                                                    {{ tab.content }}
+                                                </div>
+                                            </div>
+                                        {% endunless %}
+                                    {% endfor %}
+
+                                    {% if section.settings.show_reviews %}
+                                        <a href="#acc-reviews" class="product-single__accordion__title js-accordion-trigger js-review-accordion">
+                                            <h4 class="product-single__accordion__title-text">{{ 'products.layout.reviews' | t }}</h4>
+                                            <span class="product-single__accordion__title-icon icon-fallback">
+                                                <i class="icon icon--plus" aria-hidden="true"></i>
+                                                <span class="icon-fallback__text">{{ 'products.layout.tab_label' | t }}</span>
+                                            </span>
+                                        </a>
+                                        <div id="acc-reviews" class="product-single__accordion__item js-accordion-info">
+                                            <div class="product-single__accordion__item-wrap rte">
+                                                <div class="product-single__reviews">
+                                                    <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+              <!-- Give box -->
+<section class="section" data-section-id="{{ section.id }}" data-section-type="home-custom">
+    <div class="home-custom">
+        <div class="container--extra-large" style= "background-color: #FAFAFA">
+
+
+<br>
+<br>
+
+<div class="row">
+                 
+<div class="col-md-12">
+
+<h2 class="hidden-xs text-center" style="font-size: 3.5rem">Find in retail stores</h2>
+                                                           
+<div class="container">
+<div class="hidden-xs hidden-sm hidden-md col-md-4 col-md-offset-1">
+<center> 
+		<h1 style="font-size: 101px;">
+
+<img src="https://cdn.shopify.com/s/files/1/0986/0308/files/{{product.handle}}-retail.png" width="70%">
+</h1>
+
+</center>
+</div> 
+<div class="col-md-8 col-lg-6 col-lg-offset-0 col-md-offset-2">
+<center>
+<h3>
+Available in select retail stores
+</h3>
+<!-- Start Stockist.co widget -->
+<div data-stockist-widget-tag="u2651">Loading store locator
+<script>
+  (function(s,t,o,c,k){c=s.createElement(t);c.src=o;c.async=1;
+  k=s.getElementsByTagName(t)[0];k.parentNode.insertBefore(c,k);
+  })(document,'script','//stockist.co/embed/v1/widget.min.js');
+</script>
+<!-- End Stockist.co widget -->
+</center>
+</div>                                                    
+</div>
+<br>
+
+
+
+ {% if product.handle == 'alabama-mastercard-gift-card' %}
+                                     <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-6 col-md-12 col-lg-offset-3"">
+
+                                        <div class="col-lg-3"> 
+                                         <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15025435939445726132">             
+										</div>
+                                        <div class="col-lg-3"> 
+                                         <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15116629543932301838">             
+										</div>
+                                        <div class="col-lg-3"> 
+                                         <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/freds_926ee645-52f1-4a09-b289-e32178094e24.png?15116629543932301838">             
+										</div>
+                                        <div class="col-lg-3"> 
+                                         <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/cvs_1bffb329-e80d-4ee7-8d21-043c5981363c.png?15116629543932301838">             
+										</div>
+{% endif %}
+
+ {% if product.handle == 'arizona-mastercard-gift-card' %}
+                <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-8 col-lg-offset-5">
+    
+                                        <div class="col-lg-3"> 
+                                         <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+										</div>                                       
+{% endif %}
+{% if product.handle == 'gators-mastercard-gift-card' %}
+                                                         <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-3">
+                              
+                        <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                                                <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15116629543932301838">             
+						</div>    
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/cumberland-farms.png?15116629543932301838">             
+						</div>                         
+
+{% endif %}
+       {% if product.handle == 'seminoles-mastercard-gift-card' %}
+                                                                           <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-3">
+            
+                        <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                                                <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15116629543932301838">             
+						</div>    
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/cumberland-farms.png?15116629543932301838">             
+						</div>                         
+
+{% endif %}
+                {% if product.handle == 'cougars-mastercard-gift-card' %}
+                                                     <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-4">
+                                                                                                                            
+                         <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/heb_26015163-f825-4cbf-9273-462769f3fec7.png?15116629543932301838">             
+						</div>                         
+
+{% endif %}
+                {% if product.handle == 'cardinals-mastercard-gift-card' %}
+                                                      <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-4">
+                                                                                                                           
+                         <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15116629543932301838">             
+						</div>                         
+
+{% endif %}
+
+                {% if product.handle == 'hurricanes-mastercard-gift-card' %}
+                                                       <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-4">
+                                                                                                                          
+                         <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15116629543932301838">             
+						</div>                         
+
+{% endif %}
+
+{% if product.handle == 'wolverines-mastercard-gift-card' %}
+                                     <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-6 col-md-12 col-lg-offset-3"">
+                                                                                                                     
+                         <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15116629543932301838">             
+						</div>     
+                                                     <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/meijer.png?15116629543932301838">             
+						</div>                  
+                                                                                                                                           
+                                                     <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/fresh-thyme.png?15025435939445726132">             
+						</div>                  
+
+
+{% endif %}
+                                                                                                                                                
+ {% if product.handle == 'spartans-mastercard-gift-card' %}
+                                     <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-6 col-md-12 col-lg-offset-3"">
+                                                                                                                                     
+                         <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15116629543932301838">             
+						</div>     
+                                                     <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/meijer.png?15116629543932301838">             
+						</div>                  
+                                                                                                                                           
+                                                     <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/fresh-thyme.png?15025435939445726132">             
+						</div>                  
+
+
+{% endif %}       
+                                                                                                                                                
+        {% if product.handle == 'bulldogs-mastercard-gift-card' %}
+                                                               <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-4">
+                                                                                                                  
+                         <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/freds_926ee645-52f1-4a09-b289-e32178094e24.png?15025435939445726132">             
+						</div>     
+
+{% endif %}       
+{% if product.handle == 'huskers-mastercard-gift-card' %}
+                                                                 <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-3">
+                                                                                                                      
+                         <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/cumberland-farms.png?15116629543932301838">             
+						</div>     
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/fresh-thyme.png?15116629543932301838">             
+						</div>     
+
+{% endif %}
+       {% if product.handle == 'rebels-mastercard-gift-card' %}
+              <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-4">
+                                                                                                                 
+                                          <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/freds_926ee645-52f1-4a09-b289-e32178094e24.png?15025435939445726132">             
+						</div>       
+
+{% endif %}
+       {% if product.handle == 'beavers-mastercard-gift-card' %}
+                                                               <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-4">
+                                                                                                                  
+                                          <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/ck-market.png?15116629543932301838">             
+						</div>       
+
+{% endif %}
+               {% if product.handle == 'gamecocks-mastercard-gift-card' %}
+                                           <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-3">
+
+                                          <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>    
+                                                     <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15025435939445726132">             
+						</div>       
+
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/freds_926ee645-52f1-4a09-b289-e32178094e24.png?15025435939445726132">             
+						</div>       
+
+{% endif %}
+
+               {% if product.handle == 'vols-mastercard-gift-card' %}
+                                     <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-6 col-md-12 col-lg-offset-3"">
+                                                                                                                                 
+                                          <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>    
+                                                     <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15025435939445726132">             
+						</div>       
+
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/freds_926ee645-52f1-4a09-b289-e32178094e24.png?15025435939445726132">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/food-city_a1c8b42f-5fb6-4b1a-9926-4da8d9f3a930.png?15025435939445726132">             
+						</div>       
+{% endif %}
+               {% if product.handle == 'texas-mastercard-gift-card' %}
+                                     <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-3"">
+                                                                                                                  
+                                          <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>    
+
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/freds_926ee645-52f1-4a09-b289-e32178094e24.png?15025435939445726132">             
+						</div>       
+                             <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/heb_26015163-f825-4cbf-9273-462769f3fec7.png?15116629543932301838">             
+						</div>       
+{% endif %}
+               {% if product.handle == 'wvu-mastercard-gift-card' %}
+                                                         <div style ="margin-top:50px; margin-bottom:50px" class="col-lg-7 col-md-12 col-lg-offset-4">
+                                                                                       <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/speedway_8c4fd0a8-3e39-46d0-8f80-2058cda72122.png?15025435939445726132">             
+						</div>       
+                                                                                      
+                                          <div class="col-lg-3"> 
+                           <img class="retail-logo" src="https://cdn.shopify.com/s/files/1/0986/0308/files/dollar-general_c26f216c-b7c1-4504-8f8f-5cada2b28a24.png?15116629543932301838">             
+						</div>    
+
+{% endif %}
+
+
+
+
+                                                                                                                                         
+                                                                                                                                                
+                                                                                                                                         
+                                                                                                                            
+                                                                                                                                              
+                                                                                                                                                     
+
+</div>
+
+</div>
+
+
+</div>
+                                     
+                                     
+                                     </section>    
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      
+                                                      
+                                                                                                              
+              <!-- Give box -->
+<section class="hidden-md hidden-sm hidden-xs section" data-section-id="{{ section.id }}" data-section-type="home-custom">
+    <div class="home-custom">
+        <div class="container--extra-large" style="padding:0px 97px; background-color: #ffffff">
+
+
+<br>
+<br>
+
+<div class="row">
+<div class="col-md-12">
+
+<h2 class="text-center" style="font-size: 3.5rem">BECOME A HOLIDAY HERO</h2>
+
+<div class="container">
+<div class="col-md-3">
+<center> 
+		<h1 style="font-size: 101px;">
+
+
+<i class="pull-center fa fa-gift" aria-hidden="true"></i>
+</h1>
+<h3>THE ULTIMATE GIFT CARD</h3>
+</center>
+</div> 
+<div class="col-md-3">
+<center>
+<h1 style="    font-size: 101px;">
+<i class="pull-center fa fa-money" aria-hidden="true"></i>
+</h1>
+<h3>BETTER THAN CASH</h3>
+
+</center>
+</div>                                                    
+<div class="col-md-3">
+<center>
+	<h1 style="    font-size: 101px;">
+<i class="pull-center fa fa-shopping-basket" aria-hidden="true"></i>
+	</h1>
+<h3>USE IN-STORE AND ONLINE</h3>
+</center>
+</div>
+
+
+<div class="col-md-3">
+<center>
+<h1 style="font-size: 101px;">
+<i class="pull-center fa fa-trophy" aria-hidden="true"></i>
+</h1>
+<h3>GIVE LIKE A CHAMPION</h3>
+
+</center>
+</div>
+
+
+<center>
+
+</center>
+</div>
+<br>
+
+
+</div>
+</div>
+
+</div>
+</section>                                                                          
+                                                              
+
+
+    {% if section.settings.show_related_products == true %} 
+        {% assign number_of_related_products_per_row = section.settings.related_grid_num %}
+        {% assign number_of_rows = 1 %}
+
+        {% comment %}
+            Set either or both to true, if you want to limit yourself to items with same vendor, and/or type.
+        {% endcomment %}
+        {% assign same_vendor = false %}
+        {% assign same_type = false %}
+
+        {% comment %}
+            Collections to ignore. Never pick related items from those.
+        {% endcomment %}
+
+        {% comment %}
+            Looking for a relevant collection.
+        {% endcomment %}
+        {% if product.metafields.c_f['Related Products'] %}
+            {% assign collection = collections[product.metafields.c_f['Related Products']] %}
+        {% endif %}
+
+        {% assign found_a_collection = false %}
+        {% if collection and collection.all_products_count > 1 %}
+            {% unless exclusions contains collection.handle %}
+                {% assign found_a_collection = true %}
+            {% endunless %}
+        {% endif %}
+        {% unless found_a_collection %}
+            {% for c in product.collections %}
+                {% unless exclusions contains c.handle or c.all_products_count < 2 %}
+                    {% assign found_a_collection = true %}
+                    {% assign collection = c %}
+                    {% break %}
+                {% endunless %}
+            {% endfor %}
+        {% endunless %}
+
+        {% comment %}
+            If we have a relevant collection.
+        {% endcomment %}
+        {% if found_a_collection %}
+
+            {% assign counter = 0 %}
+            {% assign break_at = number_of_rows | times: number_of_related_products_per_row %}
+            {% assign current_product = product %}
+
+            {% case number_of_related_products_per_row %}
+                {% when 2 %}
+                    {%- assign grid_item_width = 'u-1/2@tab' -%}
+                    {%- assign image_size = '800x' -%}
+                {% when 3 %}
+                    {%- assign grid_item_width = 'u-1/3@tab' -%}
+                    {%- assign image_size = '550x' -%}
+                {% when 4 %}
+                    {%- assign grid_item_width = 'u-1/3@tab u-1/4@desk' -%}
+                    {%- assign image_size = '400x' -%}
+            {% endcase %}
+
+            {% capture related_items %}
+                {% for product in collection.products %}
+                {% unless product.handle == current_product.handle %}
+                    {% unless same_vendor and current_product.vendor != product.vendor %}
+                        {% unless same_type and current_product.type != product.type %}
+                            <div class="o-layout__item {{ grid_item_width }}">
+                                {% include 'product-grid-item', grid_image_width: image_size %}
+                            </div>
+                            {% assign counter = counter | plus: 1 %}
+                            {% if counter == break_at %}
+                                {% break %}
+                            {% endif %}
+                        {% endunless %}
+                    {% endunless %}
+                {% endunless %}
+            {% endfor %}
+            {% endcapture %}
+
+            {% assign related_items = related_items | trim %}
+
+            {% unless related_items == blank %}
+                <section class="section section--related-products">
+                    <div class="container container--medium">
+                        {% unless section.settings.related_title == blank %}
+                            <div class="section__title section__title--center">
+                                <h2 class="section__title-text">{{ section.settings.related_title | escape }}</h2>
+                            </div>
+                        {% endunless %}
+                    </div>
+                    <div class="container container--medium">
+                        <div class="related-products js-related-products" data-section-id="{{ section.id }}">
+                            <div class="o-layout layout-slider js-layout-slider js-layout-slider-{{ section.id }}{% if settings.product_grid_masonry %} o-layout--masonry{% endif %}{% if section.settings.related_grid_num == 4 %} o-layout--small{% endif %}">
+                                {{ related_items }}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% endunless %}
+         
+        {% endif %}
+    {% endif %}
+</div>
+
+{% schema %}
+{
+    "name": "Product page",
+    "class": "js-section__product-single",
+    "max_blocks": 3,
+    "settings": [
+        {
+            "type": "header",
+            "content": "Gallery settings"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_zoom",
+            "label": "Enable image zoom",
+            "default": true
+        },
+        {
+            "type": "select",
+            "id": "layout",
+            "label": "Layout",
+            "options": [
+                {
+                    "value": "full",
+                    "label": "Full width"
+                },
+                {
+                    "value": "classic",
+                    "label": "Classic"
+                }
+            ],
+            "default": "full"
+        },
+        {
+            "type": "select",
+            "id": "bg_color",
+            "label": "Background color",
+            "options": [
+                {
+                    "value": "grey",
+                    "label": "Default grey"
+                },
+                {
+                    "value": "white",
+                    "label": "White"
+                },
+                {
+                    "value": "brand",
+                    "label": "Brand"
+                },
+                {
+                    "value": "accent",
+                    "label": "Accent"
+                },
+                { 
+                    "value": "black",
+                    "label": "Black"
+                } 
+            ],
+            "default": "white"
+        },
+        {
+            "type": "select",
+            "id": "text_color",
+            "label": "Text color",
+            "options": [
+                {
+                    "value": "default",
+                    "label": "Default"
+                },
+                {
+                    "value": "default-light",
+                    "label": "Default light"
+                },
+                {
+                    "value": "dark",
+                    "label": "Dark"
+                },
+                {
+                    "value": "light",
+                    "label": "Light"
+                }
+            ],
+            "default": "default"
+        },
+        {
+            "type": "select",
+            "id": "bg_height",
+            "label": "Background height",
+            "options": [
+                {
+                    "value": "default",
+                    "label": "Default"
+                },
+                {
+                    "value": "full",
+                    "label": "Full"
+                }
+            ],
+            "default": "default"
+        },
+        {
+            "type": "select",
+            "id": "image_size",
+            "label": "Image size",
+            "options": [
+                {
+                    "value": "small",
+                    "label": "Small"
+                },
+                {
+                    "value": "medium",
+                    "label": "Medium"
+                },
+                {
+                    "value": "large",
+                    "label": "Large"
+                }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "header",
+            "content": "General settings"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_vendor",
+            "label": "Show vendor",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "show_quantity_selector",
+            "label": "Show quantity selector",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "show_share_buttons",
+            "label": "Show social sharing buttons",
+            "default": true
+        },
+        {
+            "type": "header",
+            "content": "Reviews settings"
+        },
+        {
+            "type": "paragraph",
+            "content": "You must install free [Shopify Product Reviews](https://apps.shopify.com/product-reviews) app before enabling."
+        },
+        {
+            "type": "checkbox",
+            "id": "show_reviews",
+            "label": "Enable",
+            "default": false
+        },
+        {
+            "type": "header",
+            "content": "Related products settings"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_related_products",
+            "label": "Enable related products",
+            "default": false
+        },
+        {
+            "id": "related_title",
+            "type": "text",
+            "label": "Heading",
+            "default": "Related products"
+        },
+        {
+            "type": "range",
+            "id": "related_grid_num",
+            "label": "Products per row",
+            "min": 2,
+            "max": 4,
+            "step": 1,
+            "default": 3
+        },
+        {
+            "type": "range",
+            "id": "related_grid_row",
+            "label": "Rows",
+            "min": 1,
+            "max": 3,
+            "step": 1,
+            "default": 1
+        }
+    ],
+    "blocks": [
+        {
+            "type": "text",
+            "name": "Global tab",
+            "settings": [
+                {
+                    "type": "page",
+                    "id": "tab_content",
+                    "label": "Tab content",
+                    "info": "Select page that will populate tab with content."
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

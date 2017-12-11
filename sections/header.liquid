@@ -1,0 +1,335 @@
+<style type="text/css">
+    {% if section.settings.style contains 'icons' %}.primary-nav {width: 100%}{% endif %}
+    .header__logo {width: {{ section.settings.logo_max_width }}px}
+    {% if section.settings.message_show %}
+    .announcement {
+        background-color: {{ section.settings.message_color_bg }};
+    }
+    .announcement__text,
+    .announcement__text.rte a {
+        color: {{ section.settings.message_color_text }};
+    }
+    .announcement__text.rte a {
+        border-color: {{ section.settings.message_color_text }};
+    }
+    {% endif %}
+</style>
+
+
+{% if section.settings.message_show %}
+    {% if section.settings.home_page_only == false or template.name == 'index' %}
+        <div class="announcement">
+            <div class="announcement__text rte">{{ section.settings.message_text }}</div>
+        </div>
+    {% endif %}
+{% endif %}
+<header role="banner" id="top" class="header js-header{% if section.settings.style contains 'sticky' %} js-header-sticky{% endif %}{% if section.settings.style == 'center' %} header--center{% else %} u-flex u-flex--middle u-flex--center{% endif %}{% if section.settings.show_border %} header--stripe{% endif %}" data-section-id="{{ section.id }}" data-section-type="header-section">
+  
+  
+  
+  
+  
+  <!-- Start of Async Drift Code -->
+<script>
+!function() {
+  var t;
+  if (t = window.driftt = window.drift = window.driftt || [], !t.init) return t.invoked ? void (window.console && console.error && console.error("Drift snippet included twice.")) : (t.invoked = !0, 
+  t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
+  t.factory = function(e) {
+    return function() {
+      var n;
+      return n = Array.prototype.slice.call(arguments), n.unshift(e), t.push(n), t;
+    };
+  }, t.methods.forEach(function(e) {
+    t[e] = t.factory(e);
+  }), t.load = function(t) {
+    var e, n, o, i;
+    e = 3e5, i = Math.ceil(new Date() / e) * e, o = document.createElement("script"), 
+    o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + i + "/" + t + ".js", 
+    n = document.getElementsByTagName("script")[0], n.parentNode.insertBefore(o, n);
+  });
+}();
+drift.SNIPPET_VERSION = '0.3.1';
+drift.load('t6a436u7dnvd');
+</script>
+<!-- End of Async Drift Code -->
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    {% if section.settings.show_border %}
+        <div class="header-stripe"></div>
+    {% endif %}
+<script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <div class="header__logo u-flex u-flex--middle u-flex--center{% unless section.settings.logo %} header__logo--text{% endunless %}">
+        {% if template == 'index' %}
+            <h1 class="header__logo-wrapper js-main-logo" itemscope itemtype="http://schema.org/Organization">
+        {% else %}
+            <div class="header__logo-wrapper js-main-logo" itemscope itemtype="http://schema.org/Organization">
+        {% endif %}
+            {% if section.settings.logo %}
+                <a href="/" itemprop="url" class="header__logo-link">
+                    {% capture image_size %}{{ section.settings.logo_max_width | times: 1.5 | round }}x{% endcapture %}
+                    <img src="{{ section.settings.logo | img_url: image_size }}" class="header__logo-img" alt="{{ section.settings.logo.alt | default: shop.name }}" itemprop="logo">
+                </a>
+            {% else %}
+                <a href="/" class="header__logo-link header__logo-link--text" itemprop="url">{{ shop.name }}</a>
+            {% endif %}
+        {% if template == 'index' %}
+            </h1>
+        {% else %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="header-trigger header-trigger--left mobile-draw-trigger-icon u-flex u-flex--middle js-mobile-draw-icon">
+        <a href="#" class="header-trigger__link js-mobile-draw-trigger icon-fallback">
+            <i class="icon icon--menu" aria-hidden="true"></i>
+            <span class="icon-fallback__text">{{ 'layout.navigation.menu' | t }}</span>
+        </a>
+    </div>
+    <div class="header-trigger header-trigger--right cart-draw-trigger-icon u-flex u-flex--middle js-cart-draw-icon">
+        <a href="/cart" class="header-trigger__link js-cart-trigger icon-fallback">
+            <i class="icon icon--cart" aria-hidden="true"></i>
+            <span class="icon-fallback__text">{{ 'layout.navigation.cart' | t }}</span>
+        </a>
+    </div>
+
+    <div class="header-navs js-heaver-navs u-clearfix u-hidden@tab-down">
+        
+        <nav class="primary-nav header-navs__items js-primary-nav">
+            <ul class="primary-nav__items">
+                {% for link in linklists[section.settings.main_linklist].links %}
+                    {% assign child_list_handle = link.title | handleize %}
+                    <!-- Special character fix -->
+                    {% if child_list_handle == '' %}
+                        {% assign child_list_handle = link.title %}
+                    {% endif %}
+                    {% for special in linklists %}      
+                        {% if special.title == child_list_handle %}
+                            {% assign child_list_handle = special.handle %}
+                        {% endif %}
+                    {% endfor %}
+                    <!-- End special character fix -->
+                    {% if linklists[child_list_handle].links != blank %}
+                        <li class="primary-nav__item primary-nav__item--sub{% if link.active %} primary-nav__item--active{% endif %} js-header-sub-link">
+                            <a href="{{ link.url }}" class="primary-nav__link nav__link--sub js-header-sub-link-a">{{ link.title }}</a>
+                            <div class="nav__sub" id="sub-{{ forloop.index }}">
+                                <div class="nav__sub-wrap">
+                                    <ul class="nav__sub__items o-list-bare">
+                                        {% for childlink in linklists[child_list_handle].links %}
+                                            {% assign child_list_handle = childlink.title | handleize %}
+                                            <!-- Special character fix --> 
+                                            {% if child_list_handle == '' %}
+                                                {% assign child_list_handle = childlink.title %}
+                                            {% endif %}
+                                            {% for special in linklists %}  
+                                                {% if special.title == child_list_handle %}
+                                                    {% assign child_list_handle = special.handle %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            <!-- End special character fix -->
+                                            {% if linklists[child_list_handle].links != blank %}
+                                                <li class="nav__sub__item nav__sub__item--sub js-header-sub-t-link{% if childlink.active %} nav__sub__item--active{% endif %}">
+                                                    <a href="{{ childlink.url }}" class="nav__sub__link js-header-sub-t-a">{{ childlink.title | escape }}</a>
+                                                    <div class="nav__sub-t">
+                                                        <div class="nav__sub-t-wrap">
+                                                            <ul class="nav__sub-t__items o-list-bare">
+                                                                {% for childlink in linklists[child_list_handle].links %}
+                                                                    <li class="nav__sub-t__item{% if childlink.active %} nav__sub-t__item--active{% endif %}">
+                                                                        <a href="{{ childlink.url }}" class="nav__sub-t__link">{{ childlink.title | escape }}</a>
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% else %}
+                                                <li class="nav__sub__item{% if childlink.active %} nav__sub__item--active{% endif %}">
+                                                    <a href="{{ childlink.url }}" class="nav__sub__link">{{ childlink.title | escape }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="primary-nav__item{% if link.active %} primary-nav__item--active{% endif %}">
+                            <a href="{{ link.url }}" class="primary-nav__link">{{ link.title }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </nav>
+
+        <nav class="secondary-nav header-navs__items js-secondary-nav">
+            <ul class="secondary-nav__items">
+
+                {% if shop.customer_accounts_enabled %}
+                    {% if customer %}
+                        <li class="secondary-nav__item secondary-nav__item--sub js-header-sub-link">
+                            <a href="/account" class="primary-nav__link nav__link--sub js-header-sub-link-a">{{ 'layout.customer.account' | t }}</a>
+                            <div class="nav__sub" id="sub-account">
+                                <div class="nav__sub-wrap">
+                                    <ul class="nav__sub__items o-list-bare">
+                                        
+                                        <li class="nav__sub__item"><a href="/account" class="nav__sub__link">{{ 'layout.customer.account' | t }}</a></li>
+
+                                        <li class="nav__sub__item"><a href="/account/logout" class="nav__sub__link">{{ 'layout.customer.log_out' | t }}</a></li>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="secondary-nav__item">
+                            <a href="/account/login" class="secondary-nav__link">{{ 'layout.customer.log_in' | t }}</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                <li class="secondary-nav__item"> 
+                    <a href="/cart" class="secondary-nav__link js-cart-trigger">{{ 'layout.cart.title' | t }} (<span id="CartCount">{{ cart.item_count }}</span>)</a>
+                </li>
+                
+                {% if settings.search_enable %}
+                    <li class="secondary-nav__item secondary-nav__item--search">
+                        <a href="/search" class="secondary-nav__link secondary-nav__link--search icon-fallback js-search-trigger">
+                            <i class="icon icon--search" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">{{ 'layout.navigation.search' | t }}</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+
+    </div>
+  
+
+  
+</header>
+  
+  
+    
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% schema %}
+{
+    "name": "Header",
+    "class": "js-section__header",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo image"
+        },
+        {
+            "type": "range",
+            "id": "logo_max_width",
+            "label": "Custom logo width",
+            "unit": "px",
+            "min": 40,
+            "max": 400,
+            "step": 10,
+            "default": 200
+        },
+        {
+            "type": "link_list",
+            "id": "main_linklist",
+            "label": "Menu",
+            "default": "main-menu"
+        },
+        {
+            "type": "select",
+            "id": "style",
+            "label": "Navigation style",
+            "options": [
+                {
+                    "value": "left",
+                    "label": "Inline"
+                },
+                {
+                    "value": "sticky-left",
+                    "label": "Sticky inline"
+                },
+                {
+                    "value": "icons",
+                    "label": "Icons"
+                },
+                {
+                    "value": "sticky-icons",
+                    "label": "Sticky icons"
+                },
+                {
+                    "value": "center",
+                    "label": "Center"
+                }
+            ],
+            "default": "left"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_border",
+            "label": "Show accent border",
+            "default": true
+        },
+        {
+            "type": "header",
+            "content": "Announcement bar"
+        },
+        {
+            "type": "checkbox",
+            "id": "message_show",
+            "label": "Enable announcement bar",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "home_page_only",
+            "label": "Home page only",
+            "default": false
+        },
+        {
+            "type": "richtext",
+            "id": "message_text",
+            "label": "Text",
+            "default": "<p>Use this announcement bar to share some news and link to page or product.</p>"
+        },
+        {
+            "type": "color",
+            "id": "message_color_bg",
+            "label": "Background color",
+            "default": "#222"
+        },
+        {
+            "type": "color",
+            "id": "message_color_text",
+            "label": "Text color",
+            "default": "#fff"
+        }
+    ]
+}
+{% endschema %}

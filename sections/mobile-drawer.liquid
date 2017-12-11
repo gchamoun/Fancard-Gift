@@ -1,0 +1,247 @@
+<div class="mobile-draw mobile-draw--{{ settings.color_drawer_style }} u-bg-{{ settings.color_drawer_bg }} js-menu-draw mfp-hide">
+    <nav class="mobile-draw__nav mobile-nav">
+        <ul class="mobile-nav__items o-list-bare">
+            {% for link in linklists[section.settings.main_linklist].links %}
+                {% assign child_list_handle = link.title | handleize %}
+                <!-- Special character fix -->
+                {% if child_list_handle == '' %}
+                    {% assign child_list_handle = link.title %}
+                {% endif %}
+                {% for special in linklists %}      
+                    {% if special.title == child_list_handle %}
+                        {% assign child_list_handle = special.handle %}
+                    {% endif %}
+                {% endfor %}
+                <!-- End special character fix -->
+                {% if linklists[child_list_handle].links != blank %}
+                    <li class="mobile-nav__item mobile-nav__item--sub{% if link.active %} mobile-nav__item--active{% endif %}">
+                        <a href="#mobile-sub-{{ forloop.index }}" class="mobile-nav__link mobile-nav__link--sub js-toggle-trigger">{{ link.title }}</a>
+                        <div class="mobile-nav__sub js-toggle-target" id="mobile-sub-{{ forloop.index }}">
+                            <ul class="mobile-nav__sub__items o-list-bare">
+                                {% for childlink in linklists[child_list_handle].links %}
+                                    {% assign child_list_handle = childlink.title | handleize %}
+                                    <!-- Special character fix --> 
+                                    {% if child_list_handle == '' %}
+                                        {% assign child_list_handle = childlink.title %}
+                                    {% endif %}
+                                    {% for special in linklists %}  
+                                        {% if special.title == child_list_handle %}
+                                            {% assign child_list_handle = special.handle %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <!-- End special character fix -->
+                                    {% if linklists[child_list_handle].links != blank %}
+                                        <li class="mobile-nav__sub__item mobile-nav__sub__item--sub{% if childlink.active %} mobile-nav__sub__item--active{% endif %}">
+                                            <a href="#mobile-sub-t-{{ forloop.index }}" class="mobile-nav__sub__link mobile-nav__sub__link--t js-toggle-trigger">{{ childlink.title | escape }}</a>
+                                            <div class="mobile-nav__sub-t js-toggle-target" id="mobile-sub-t-{{ forloop.index }}">
+                                                <ul class="mobile-nav__sub-t__items o-list-bare">
+                                                    {% for childlink in linklists[child_list_handle].links %}
+                                                        <li class="mobile-nav__sub-t__item{% if childlink.active %} mobile-nav__sub-t__item--active{% endif %}">
+                                                            <a href="{{ childlink.url }}" class="mobile-nav__sub-t__link">{{ childlink.title | escape }}</a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    {% else %}
+                                        <li class="mobile-nav__sub__item{% if childlink.active %} mobile-nav__sub__item--active{% endif %}">
+                                            <a href="{{ childlink.url }}" class="mobile-nav__sub__link">{{ childlink.title | escape }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="mobile-nav__item{% if link.active %} mobile-nav__item--active{% endif %}">
+                        <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if shop.customer_accounts_enabled %}
+                {% if customer %}
+                    <li class="mobile-nav__item">
+                        <a href="/account" class="mobile-nav__link">{{ 'layout.customer.account' | t }}</a>
+                    </li>
+                    <li class="mobile-nav__item">
+                        <a href="/account/logout" class="mobile-nav__link">{{ 'layout.customer.log_out' | t }}</a>
+                    </li>
+                {% else %}
+                    <li class="mobile-nav__item">
+                        <a href="/account/login" class="mobile-nav__link">{{ 'layout.customer.log_in' | t }}</a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% if settings.search_enable %}
+        <div class="mobile-draw__search mobile-search">
+            <form action="/search" method="get" class="mobile-search__form" role="search">
+                <input type="hidden" name="type" value="{{ settings.search_limit }}">
+                <input type="search" name="q" class="mobile-search__input" value="{{ search.terms | escape }}" aria-label="{{ 'general.search.placeholder' | t }}" placeholder="{{ 'general.search.placeholder' | t }}">
+                <button type="submit" class="mobile-search__submit">
+                    <i class="icon icon--search" aria-hidden="true"></i>
+                    <span class="icon-fallback__text">{{ 'general.search.submit' | t }}</span>
+                </button>
+            </form>
+        </div>
+    {% endif %}
+
+    <div class="mobile-draw__footer mobile-footer">
+        {% if section.settings.show_contact_number or section.settings.show_contact_email %}
+            <div class="mobile-footer__contact">
+                {% unless section.settings.contact_title == blank %}
+                    <h4 class="mobile-footer__title">{{ section.settings.contact_title | escape }}</h4>
+                {% endunless %}
+                {% if section.settings.show_contact_number %}
+                    <p class="mobile-footer__text"><a href="tel:{{ shop.address.phone }}" class="mobile-footer__text-link">{{ shop.address.phone }}</a></p>
+                {% endif %}    
+                {% if section.settings.show_contact_email %}
+                    <p class="mobile-footer__text"><a href="mailto:{{ shop.email }}" class="mobile-footer__text-link">{{ shop.email }}</a></p>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if section.settings.show_social %}
+            <ul class="mobile-footer__social-items o-list-bare">
+                {% unless settings.social_facebook_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_facebook_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--facebook" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Facebook</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_twitter_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_twitter_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--twitter" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Twitter</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_pinterest_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_pinterest_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--pinterest" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Pinterest</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_instagram_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_instagram_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--instagram" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Instagram</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_googleplus_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_googleplus_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--google-plus" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Google+</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_tumblr_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_tumblr_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--tumblr" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Tumblr</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_snapchat_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_snapchat_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--snapchat" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Snapchat</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_youtube_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_youtube_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--youtube" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">YouTube</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_vimeo_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_vimeo_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--vimeo" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Vimeo</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_fancy_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_fancy_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--fancy" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Fancy</span>
+                        </a>
+                    </li>
+                {% endunless %}
+                {% unless settings.social_untappd_link == blank %}
+                    <li class="mobile-footer__social-item">
+                        <a href="{{ settings.social_untappd_link }}" class="mobile-footer__social-link icon-fallback" target="_blank">
+                            <i class="icon icon--untappd" aria-hidden="true"></i>
+                            <span class="icon-fallback__text">Untappd</span>
+                        </a>
+                    </li>
+                {% endunless %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "Sidebar menu",
+    "class": "js-section__mobile-draw",
+    "settings": [
+        {
+            "type": "link_list",
+            "id": "main_linklist",
+            "label": "Menu",
+            "default": "main-menu"
+        },
+        {
+            "type": "header",
+            "content": "Contact info",
+            "info": "Edit content in shop settings 'General'."
+        },
+        {
+            "type": "text",
+            "id": "contact_title",
+            "label": "Heading",
+            "default": "Contact"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_contact_number",
+            "label": "Show phone number",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "show_contact_email",
+            "label": "Show email",
+            "default": true
+        },
+        {
+            "type": "header",
+            "content": "Social links",
+            "info": "Edit content in theme 'General Settings > Social'."
+        },
+        {
+            "type": "checkbox",
+            "id": "show_social",
+            "label": "Show social links",
+            "default": true
+        }
+    ]
+}
+{% endschema %}

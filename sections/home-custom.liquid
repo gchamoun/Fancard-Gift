@@ -1,0 +1,26 @@
+
+            {% if section.settings.code != blank %}
+                {{ section.settings.code }}
+            {% endif %}
+   
+
+{% schema %}
+{
+    "name": "Custom HTML",
+    "class": "js-section__home-custom",
+    "settings": [
+        {
+            "type": "html",
+            "id": "code",
+            "label": "HTML",
+            "default": "<div class=placeholder-noblocks>Use this section to create or embed advanced HTML content.</div>"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Custom HTML",
+            "category": "Advanced"
+        }
+    ]
+}
+{% endschema %}
